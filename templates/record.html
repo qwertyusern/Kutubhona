@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Record</title>
+</head>
+<body>
+    <h1 style="text-align:center">Bizda bor record royhati: </h1>
+    {% for i in rec %}
+    <ul>
+        <li><h2>{{i}}</h2></li>
+    </ul>
+    {%endfor%}
+    <br>
+    <hr>
+    <form method="post" action="/record/">{% csrf_token %}
+        <select name="student">
+            {%for i in st%}
+            <option value="{{i.id}}">{{i.ism}}</option>
+            {%endfor%}
+        </select>
+        <select name="kitob">
+            {%for i in kt%}
+            <option value="{{i.id}}">{{i.nom}}</option>
+            {%endfor%}
+        </select>
+        <input type="date" name="sana" placeholder="sanani kiriting">
+      <button type="submit">Qoshish</button>
+    </form>
+    <br>
+    <br>
+    <br>
+    <a href="/asosiy/"><h2>Asosiy</h2></a>
+    <br>
+</body>
+</html>

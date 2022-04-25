@@ -1,7 +1,21 @@
 from django.contrib import admin
+from django.contrib.admin import ModelAdmin
 from .models import *
 
-admin.site.register(Muallif)
-admin.site.register(kitob)
-admin.site.register(student)
-admin.site.register(Record)
+
+@admin.register(Muallif)
+class StudentAdmin(ModelAdmin):
+    search_fields = ("id","ism")
+
+@admin.register(kitob)
+class StudentAdmin(ModelAdmin):
+    list_display = ("nom","sahifa","janr")
+    search_fields = ("id","nom","muallif")
+    autocomplete_fields = ("muallif",)
+@admin.register(student)
+class StudentAdmin(ModelAdmin):
+    pass
+@admin.register(Record)
+class StudentAdmin(ModelAdmin):
+    pass
+

@@ -14,6 +14,8 @@ class kitob(models.Model):
     muallif=models.ForeignKey(Muallif,on_delete=models.CASCADE,related_name="m_k")
     def __str__(self):
         return self.nom
+    class Meta:
+        ordering=("nom",)
 class student(models.Model):
     ism = models.CharField(max_length=30)
     guruh = models.CharField(max_length=30,blank=True)
@@ -21,6 +23,8 @@ class student(models.Model):
     kitoblar_soni = models.PositiveSmallIntegerField(default=0)
     def __str__(self):
         return self.ism
+    class Meta:
+        ordering=("ism",)
 class Record(models.Model):
     student=models.ForeignKey(student,on_delete=models.CASCADE,related_name="s")
     kitob=models.ForeignKey(kitob,on_delete=models.CASCADE,related_name="k")

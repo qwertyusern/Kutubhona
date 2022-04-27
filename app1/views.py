@@ -83,7 +83,17 @@ def record(request):
             sana=request.POST.get("sana")
         )
         return redirect("/record/")
-    return render(request,"record.html",{"rec":r,"st":s,"kt":k})
+    soz = request.GET.get("qidirish")
+    if soz==None:
+        k=kitob.objects.all().order_by("nom")
+    else:
+        k = kitob.objects.filter(nom=soz)
+    s = request.GET.get("q")
+    if s==None:
+        s=student.objects.all().order_by("ism")
+    else:
+        s =student.objects.filter(ism=s)
+    return render(request,"record.html",{"student":s,"kitoblar":k,"rec":r,"st":s,"kt":k})
 def kitob_edit(request,p):
     if request.method=="POST":
         k=kitob.objects.get(id=p)

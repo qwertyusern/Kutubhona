@@ -6,6 +6,7 @@
 </head>
 <body>
     <h1 style="text-align: center">Bizda bor kitoblar royhati: </h1>
+
     {% for i in kitoblar %}
     <ul>
         <li><h2>{{i}}</h2>></li>
@@ -13,8 +14,21 @@
     <button><a href="/kitoblar/{{i.id}}">O'chirish</a> </button>
     <button><a href="/kitob_edit/{{i.id}}">tahrirlash</a> </button>
     {%endfor%}
+
+    <hr>
+
+    <form>
+        <label for="qidirish">
+        Qaysi kitobni qidirmoqchiligingizni yozing:
+        <input id="qidirish" name="qidirish" placeholder="Kitob nomi">
+        <button>Qidirish</button>
+        </label>
+    </form>
+
+    <hr>
     <br>
     <hr>
+
     <form method="post" action="/kitob/">{% csrf_token %}
       <label for="nom">
       Kitob nomi:
@@ -44,14 +58,7 @@
       </label>
       <button type="submit">Qoshish</button>
     </form>
-    <hr>
-    <form>
-        <label for="qidirish">
-        Qaysi kitobni qidirmoqchiligingizni yozing:
-        <input id="qidirish" name="qidirish" placeholder="Kitob nomi">
-        <button>Qidirish</button>
-        </label>
-    </form>
+
     <br>
     <br>
     <a href="/asosiy/"><h2>Asosiy</h2></a>

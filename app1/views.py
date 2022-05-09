@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from .models import *
+from .forms import *
 def salomlash(request):
     return render(request,"salomlash.html")
 def men(request):
@@ -10,16 +11,10 @@ def loyiha(request):
 def asosiy(request):
     return render(request,"asosiy.html")
 def Kitoblar(request):
-    if request.method=="POST":
-        i = request.POST.get("muallif")
-        m = Muallif.objects.get(id=i)
-        kitob.objects.create(
-            nom=request.POST.get("nom"),
-            sana=request.POST.get("s"),
-            sahifa=request.POST.get("sahifa"),
-            janr=request.POST.get("j"),
-            muallif=m
-        )
+    if request.method == "POST":
+        f = Kitobform(request.POST)
+        if f.is_valid():
+            f.save()
         return redirect("/kitob/")
     soz= request.GET.get("qidirish")
     m = Muallif.objects.all()
@@ -27,41 +22,40 @@ def Kitoblar(request):
         k=kitob.objects.all().order_by("nom")
     else:
         k = kitob.objects.filter(nom=soz)
-    return render(request,"books.html",{"kitoblar":k,"muallif":m})
+    f=Kitobform()
+    return render(request,"books.html",{"kitoblar":k,"muallif":m,"form":f})
 def Studentlar(request):
     if request.method=="POST":
-        if request.POST.get("t")== False:
-            natija=False
-        else:
-            natija=True
-        student.objects.create(
-            ism=request.POST.get("ismi"),
-            guruh=request.POST.get("g"),
-            bitiruvchi=natija,
-            kitoblar_soni=request.POST.get("k_s")
+        f=Studentform(request.POST)
+        if f.is_valid():
+            student.objects.create(
+                ism=f.cleaned_data.get("ism"),
+                guruh=f.cleaned_data.get("guruh"),
+                bitiruvchi=f.cleaned_data.get("bitiruvchi"),
+                kitoblar_soni=f.cleaned_data.get("kitoblar_soni")
         )
         return redirect("/student/")
+    f=Studentform()
     soz = request.GET.get("qidirish")
     if soz == None:
         s = student.objects.all().order_by("ism")
     else:
         s = student.objects.filter(ism=soz)
-    return render(request,"studentlar.html",{"studentlar":s})
+    return render(request,"studentlar.html",{"studentlar":s, "form":f})
 def mualliflar(request):
-    if request.method=="POST":
-        if request.POST.get("t")== False:
-            natija=False
-        else:
-            natija=True
-        Muallif.objects.create(
-            ism=request.POST.get("ismi"),
-            tirik=natija,
-            yosh=request.POST.get("y"),
-            kitoblar_soni=request.POST.get("k_s")
-        )
+    if request.method == "POST":
+        f = Muallifform(request.POST)
+        if f.is_valid():
+            Muallif.objects.create(
+                ism=f.cleaned_data.get("ism"),
+                tirik=f.cleaned_data.get("tirik"),
+                bitiruvchi=f.cleaned_data.get("bitiruvchi"),
+                kitoblar_soni=f.cleaned_data.get("kitoblar_soni")
+            )
         return redirect("/muallif/")
+    f=Muallifform
     m=Muallif.objects.all().order_by("ism")
-    return render(request,"muallif.html",{"muallif":m})
+    return render(request,"muallif.html",{"muallif":m,"form":f})
 def kitob_ochir(request,son):
     kitob.objects.get(id=son).delete()
     return redirect("/kitob/")
@@ -70,30 +64,13 @@ def student_ochir(request,son):
     return redirect("/student/")
 def record(request):
     r = Record.objects.all()
-    s=student.objects.all()
-    k=kitob.objects.all()
+    f = Recordform()
     if request.method == "POST":
-        i = request.POST.get("student")
-        s = student.objects.get(id=i)
-        u = request.POST.get("kitob")
-        k = kitob.objects.get(id=u)
-        Record.objects.create(
-            student=s,
-            kitob=k,
-            sana=request.POST.get("sana")
-        )
+        f = Recordform(request.POST)
+        if f.is_valid():
+            f.save()
         return redirect("/record/")
-    soz = request.GET.get("qidirish")
-    if soz==None:
-        k=kitob.objects.all().order_by("nom")
-    else:
-        k = kitob.objects.filter(nom=soz)
-    s = request.GET.get("q")
-    if s==None:
-        s=student.objects.all().order_by("ism")
-    else:
-        s =student.objects.filter(ism=s)
-    return render(request,"record.html",{"student":s,"kitoblar":k,"rec":r,"st":s,"kt":k})
+    return render(request,"record.html",{"rec":r,"form":f})
 def kitob_edit(request,p):
     if request.method=="POST":
         k=kitob.objects.get(id=p)
@@ -101,7 +78,7 @@ def kitob_edit(request,p):
         k.sana=request.POST.get("s")
         k.sahifa=request.POST.get("sahifa")
         k.janr=request.POST.get("j")
-        k.muallif=kitob.objects.get(id=request.POST.get("muallif"))
+        k.muallif=Muallif.objects.get(id=request.POST.get("muallif"))
         k.save()
         return redirect("/kitob/")
     k1=kitob.objects.get(id=p)

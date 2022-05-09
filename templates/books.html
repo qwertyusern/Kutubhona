@@ -30,32 +30,7 @@
     <hr>
 
     <form method="post" action="/kitob/">{% csrf_token %}
-      <label for="nom">
-      Kitob nomi:
-      <input type="text" id="nom" name="nom" placeholder="kitobning nomi">
-      </label>
-      <label for="s">
-      Sana:
-      <input type="date" id="s" name="s" placeholder="sanani kiriting">
-      </label>
-      <br> <br>
-      <label for="sahifa">
-      Sahifa:
-      <input type="number" id="sahifa" name="sahifa" placeholder="Kitobning sahifasini kiriting">
-      </label>
-      <label for="j">
-      Janr:
-      <input type="text" id="j" name="j" placeholder="janr">
-      </label>
-      <br> <br>
-      <label for="muallif">
-      Muallif:
-        <select id="muallif" name="muallif">
-            {%for i in muallif%}
-            <option value="{{i.id}}">{{i.ism}}</option>
-            {%endfor%}
-        </select>
-      </label>
+      {{form}}
       <button type="submit">Qoshish</button>
     </form>
 

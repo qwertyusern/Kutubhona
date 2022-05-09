@@ -15,10 +15,7 @@
   <br>
   <hr>
   <form method="post" action="/muallif/">{% csrf_token %}
-      <input type="text" name="ismi" placeholder="Muallifning ismi">
-      <input type="checkbox" name="t">
-      <input type="number" name="y" placeholder="Yoshi">
-      <input type="number" name="k_s" placeholder="Kitoblar_soni">
+      {{form}}
       <button type="submit">Qoshish</button>
   </form>
   <br>

@@ -14,38 +14,10 @@
     <br>
     <hr>
     <form method="post" action="/record/">{% csrf_token %}
-        <select name="student">
-            {%for i in st%}
-            <option value="{{i.id}}">{{i.ism}}</option>
-            {%endfor%}
-        </select>
-        <select name="kitob">
-            {%for i in kt%}
-            <option value="{{i.id}}">{{i.nom}}</option>
-            {%endfor%}
-        </select>
-        <input type="date" name="sana" placeholder="sanani kiriting">
+      {{form}}
       <button type="submit">Qoshish</button>
     </form>
     <br><br>
-    <form>
-        <label for="qidirish">
-        Qaysi kitobni qidirmoqchiligingizni yozing:
-        <input id="qidirish" name="qidirish" placeholder="Kitob nomi">
-        <button>Qidirish</button>
-        </label>
-    </form>
-    <br>
-    <form>
-        <label for="q">
-        Qaysi studentni qidirmoqchiligingizni yozing:
-        <input id="q" name="q" placeholder="student ismi">
-        <button>Qidirish</button>
-        </label>
-    </form>
-    <br>
-    <br>
-    <br>
     <a href="/asosiy/"><h2>Asosiy</h2></a>
     <br>
 </body>
